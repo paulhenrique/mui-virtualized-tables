@@ -10,6 +10,7 @@ export const Primary = () => {
   const data = new Array(100).fill(true).map(() => ({
     id: randomSentence(),
     name: randomSentence(),
+    btn: <button>test</button>,
   }));
 
   return (
@@ -18,30 +19,40 @@ export const Primary = () => {
         {
           id: "id",
           label: "ID",
-          tableCellProps: {
-            width: "300px",
-            style: {
-              maxWidth: "300px",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-            },
-          },
+        },
+        {
+          id: "btn",
+          label: "btn",
         },
         {
           id: "name",
           label: "Name",
-          tableCellProps: {
-            width: "300px",
+        },
+      ]}
+      TableProps={{
+        Root: {
+          style: {
+            width: "100%",
+          },
+        },
+        Head: {
+          TableRowProps: {
             style: {
-              maxWidth: "300px",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
+              display: "flex",
             },
           },
         },
-      ]}
+        Row: {
+          style: {
+            display: "flex",
+          },
+        },
+        Cell: {
+          style: {
+            flex: "1",
+          },
+        },
+      }}
       VirtualizedListProps={{
         height: 300,
         width: "100%",
