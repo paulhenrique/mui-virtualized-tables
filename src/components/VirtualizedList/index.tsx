@@ -1,17 +1,29 @@
-import { useCallback, useMemo, useRef } from "react";
+import {
+  ComponentType,
+  Fragment,
+  ReactNode,
+  useCallback,
+  useMemo,
+  useRef,
+} from "react";
 import { ListProps, VariableSizeList as List } from "react-window";
 import { useWindowResize } from "./hooks/useWindowResize";
-import { Row } from "./components/Row";
+import { Row, RowProps } from "./components/Row";
 
 export type dataRowsType<T> = T;
 
 export interface VirtualizedListProps extends Omit<ListProps, "children"> {
   data: dataRowsType<any[]>;
+  component?: ComponentType<any> | string;
+
+  rowProps?: Pick<RowProps, "component">;
 }
 
 export function VirtualizedList(props: VirtualizedListProps) {
-  const { data } = props;
+  const { data, rowProps = {} } = props;
   const listRef = useRef<any>();
+
+  const EnvComponent = props.component || "div";
 
   const sizeMap = useRef({} as { [key: string]: number });
   const setSize = useCallback((index: number, size: number): void => {
@@ -22,16 +34,23 @@ export function VirtualizedList(props: VirtualizedListProps) {
   const [windowWidth] = useWindowResize();
 
   return (
-    <List ref={listRef} itemSize={getSize} itemData={data} {...props}>
+    <List
+      outerElementType={EnvComponent}
+      innerElementType={Fragment}
+      ref={listRef}
+      itemSize={getSize}
+      itemData={data}
+      {...props}
+    >
       {({ data, index, style }) => (
-        <div style={style}>
-          <Row
-            data={data}
-            index={index}
-            setSize={setSize}
-            windowWidth={windowWidth}
-          />
-        </div>
+        <Row
+          data={data}
+          index={index}
+          setSize={setSize}
+          windowWidth={windowWidth}
+          style={style}
+          {...rowProps}
+        />
       )}
     </List>
   );
