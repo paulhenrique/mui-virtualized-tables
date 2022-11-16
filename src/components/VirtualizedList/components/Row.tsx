@@ -4,9 +4,7 @@ import { ListChildComponentProps } from "react-window";
 export interface RowProps extends Omit<ListChildComponentProps, "style"> {
   setSize: (index: number, size: number) => void;
   windowWidth: number;
-
   component?: ComponentType<any>;
-
   style?: React.CSSProperties;
 }
 
@@ -19,15 +17,16 @@ export const Row = ({
   ...props
 }: RowProps) => {
   const rowRef = useRef<any>();
-
   const EnvComponent = props.component || "div";
 
   useEffect(() => {
     setSize(index, rowRef?.current?.getBoundingClientRect()?.height);
-  }, [setSize, index, windowWidth]);
+  }, [setSize, index, windowWidth, rowRef]);
+
+  const { height: _h, ...restStyle } = style || {};
 
   return (
-    <EnvComponent style={style} ref={rowRef}>
+    <EnvComponent style={restStyle} ref={rowRef}>
       {data[index]}
     </EnvComponent>
   );

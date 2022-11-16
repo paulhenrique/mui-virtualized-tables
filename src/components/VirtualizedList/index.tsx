@@ -30,7 +30,10 @@ export function VirtualizedList(props: VirtualizedListProps) {
     sizeMap.current = { ...sizeMap.current, [index]: size };
     listRef.current.resetAfterIndex(index);
   }, []);
-  const getSize = (index: number): number => sizeMap?.current[index] || 50;
+  const getSize = (index: number): number => {
+    console.table(sizeMap?.current);
+    return sizeMap?.current[index] || 50;
+  };
   const [windowWidth] = useWindowResize();
 
   return (
